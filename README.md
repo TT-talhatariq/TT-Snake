@@ -17,6 +17,7 @@ Help          |  Game Play
 ![Help img](Screen%20Shots/help.jpg)  |  ![snake moving img](Screen%20Shots/snake-moving.jpg)
 
 Game Over
+:-------------------------:
 ![Game over img](Screen%20Shots/game-over.jpg)   
 ## Demo
 Download the Jar file and double click to run & Enjoy the Game🎉
