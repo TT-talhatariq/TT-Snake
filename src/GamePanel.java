@@ -1,5 +1,5 @@
 /*
-This class consists UI, Control, L
+This class consists UI, Control, Logic & everything about Game.
  */
 
 import javax.swing.*;
@@ -15,16 +15,15 @@ public class GamePanel extends JPanel implements ActionListener {
     static final int Height = 700;
     static final int UNIT_Size = 35;
     static final int Game_Unit = (Width*Height)/ UNIT_Size;
-    static  final int delay = 150;
-    final int x [] = new int[50];
-    final int y[] = new int[50];
-    int bodyParts = 5;
-    int appleEaten = 0;
-    int appleX, appleY;
-    Image food;
-    char direction = 'R';
+    static  final int delay = 150;          //Change this parameter for controlling speed of the Snake
+    final int x [] = new int[50];          //Snake position on X axis
+    final int y[] = new int[50];          //Snake position on Y axis
+    int bodyParts = 5;                   //Body Parts of Snake
+    int fruitX, fruitY;                 //Position of Food
+    Image food;                        //Food Image
+    char direction = 'R';             //Direction
     boolean running, pause = false;
-    int Score = 0;
+    int Score = 0;                  //Score
     Timer timer;
     final static Image logo = new ImageIcon("src/img/logo.png").getImage();
 
@@ -36,6 +35,7 @@ public class GamePanel extends JPanel implements ActionListener {
         setBackground(new Color(230,230,250));
         setLayout(null);
 
+        //Buttons action listener
         start.addActionListener(this);
         new_game.addActionListener(this);
         help.addActionListener(this);
@@ -43,6 +43,7 @@ public class GamePanel extends JPanel implements ActionListener {
         pausee.addActionListener(this);
         play.addActionListener(this);
 
+        //Buuttons Positions
         start.setBounds(900, 230,120,70);
         pausee.setBounds(900, 230,120,70);
         play.setBounds(900, 230,120,70);
@@ -55,7 +56,6 @@ public class GamePanel extends JPanel implements ActionListener {
         pausee.setVisible(false);
         play.setVisible(false);
 
-
         add(start);
         add(help);
         add(new_game);
@@ -64,8 +64,9 @@ public class GamePanel extends JPanel implements ActionListener {
         add(play);
     }
 
+    //Start Game Method
     public void startGame(){
-        newapple();
+        newfruit();
         running  = true;
         timer = new Timer(delay, this);
         timer.start();
@@ -74,6 +75,7 @@ public class GamePanel extends JPanel implements ActionListener {
         new_game.setVisible(true);
     }
 
+    //New_Game, when new game button or N will be pressed
     public void New_game(){
         timer.stop();
         running = false;
@@ -84,13 +86,13 @@ public class GamePanel extends JPanel implements ActionListener {
         direction = 'R';
         startGame();
     }
+
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         Graphics2D gd = (Graphics2D) g;
-        //Rows Boxex
+        //Rows Drawing Screen
         for(int i=0; i<Width/UNIT_Size+1; i++) {
             for (int j = 0; j < Height/UNIT_Size; j++) {
-
                 if ((i+j) % 2 == 0)
                     gd.setColor(new Color(170, 215, 81));
                 else
@@ -100,10 +102,13 @@ public class GamePanel extends JPanel implements ActionListener {
 
             }
         }
+
+        //Line between Game Play stage & Button Panel
         gd.setColor(Color.red);
         gd.setStroke(new BasicStroke(3));
         gd.drawLine(Width+26,0,Width+26,Height);
-        //Snake Drawing
+
+        //Snake Drawing Logic
             for (int i = 0; i < bodyParts; i++) {
                 if (i == 0 ){
                     gd.setColor(new Color(248, 55, 55));
@@ -120,10 +125,11 @@ public class GamePanel extends JPanel implements ActionListener {
 
             }
         }
-        //New Apple
-        gd.drawImage(food, appleX, appleY, null);
 
-        //Score
+        //New Fruit
+        gd.drawImage(food, fruitX, fruitY, null);
+
+        //Score Updating
         gd.setColor(new Color(93, 1, 1));
         gd.setFont(new Font(Font.MONOSPACED, Font.BOLD, 35));
         gd.drawString("Score:" + Score, 660 ,40);
@@ -134,8 +140,9 @@ public class GamePanel extends JPanel implements ActionListener {
             Gameover(g);
         }
     }
-    public  void move(){
 
+    //Moving Snake Method
+    public  void move(){
         for(int i=bodyParts; i>0; i--){
             x[i]  = x[i-1];
             y[i] = y[i-1];
@@ -156,27 +163,31 @@ public class GamePanel extends JPanel implements ActionListener {
         }
 
     }
-    public void newapple() {
-        final String[] Food_Images = new String[]{"src/img/ic_orange.png", "src/img/ic_apple.png", "src/img/ic_cherry.png",
+
+    //New Fruit Method
+    public void newfruit() {
+        final String[] Food_Images = new String[]{"src/img/ic_orange.png", "src/img/ic_fruit.png", "src/img/ic_cherry.png",
                 "src/img/ic_berry.png", "src/img/ic_coconut_.png", "src/img/ic_peach.png", "src/img/ic_watermelon.png", "src/img/ic_orange.png",
                 "src/img/ic_pomegranate.png"};
         Random random = new Random();
-        appleX = random.nextInt(Width / UNIT_Size) * UNIT_Size;
-        appleY = random.nextInt(Height / UNIT_Size) * UNIT_Size;
+        fruitX = random.nextInt(Width / UNIT_Size) * UNIT_Size;
+        fruitY = random.nextInt(Height / UNIT_Size) * UNIT_Size;
         food = new ImageIcon(Food_Images[random.nextInt(9)]).getImage().getScaledInstance(35,35,5);
 
     }
-    public void checkApple(){
-        if(x[0]==appleX && y[0] ==appleY){
+
+    //Check if snakes eat fruit or not
+    public void checkFruit(){
+        if(x[0]==fruitX && y[0] ==fruitY){
             Audio clicked = new Audio("src/sounds/eat.wav");
             clicked.audio.start();
-            newapple();
+            newfruit();
             bodyParts++;
-            appleEaten++;
             Score+=5;
         }
 
     }
+    //Checking Game over conditions
     public void checkCollision(){
         for(int i=bodyParts; i>0; i--) {
             //If Body Touches itself
@@ -200,29 +211,42 @@ public class GamePanel extends JPanel implements ActionListener {
             }
         }
     }
+
+    //Game Over Message
     public void Gameover(Graphics g){
         g.setColor(new Color(157, 6, 6));
         g.setFont(new Font("Georgia", Font.BOLD, 60));
         FontMetrics fontMetrics  = getFontMetrics(g.getFont());
         g.drawString("Game Over", (Width-fontMetrics.stringWidth("Game Over"))/2, (int) ((Height-fontMetrics.stringWidth("Game Over"))/1.5));
     }
+    //Play Button Logic
     void play(){
         play.setVisible(false);
         pausee.setVisible(true);
         timer.start();
     }
+    //Pause Button Logic
     void pause() {
         play.setVisible(true);
         pausee.setVisible(false);
         timer.stop();
     }
+
     void audio(){
         Audio clicked = new Audio("src/sounds/click.wav");
         clicked.audio.start();
     }
 
+    //Action Performed Method
     @Override
     public void actionPerformed(ActionEvent e) {
+        if(running) {
+            move();
+            checkCollision();
+            checkFruit();
+        }
+        repaint();
+
         if(e.getSource() == start)
             startGame();
 
@@ -230,29 +254,27 @@ public class GamePanel extends JPanel implements ActionListener {
             New_game();
             repaint();
         }
+
         if(e.getSource() == about){
             if(new_game.isVisible() && pausee.isVisible())
                 pause();
             new About();
         }
-        if(running) {
-            move();
-            checkCollision();
-            checkApple();
-        }
-        repaint();
 
         if(e.getSource() == help){
             if(new_game.isVisible() && pausee.isVisible())
                 pause();;
            new Help();
         }
+
         if(e.getSource() == pausee)
             pause();
+
         if(e.getSource() == play)
             play();
     }
 
+    //KeyBoard Control
     public class MyKeyAdapter extends KeyAdapter{
         @Override
         public void keyPressed(KeyEvent e){
