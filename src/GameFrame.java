@@ -1,8 +1,9 @@
+//Main Frame
 import javax.swing.*;
 import java.awt.*;
 
 public class GameFrame extends JFrame{
-    Image icon = new ImageIcon("src/img/snake.png").getImage();
+    final  static Image icon = new ImageIcon("src/img/snake.png").getImage();
     GameFrame(){
         add(new GamePanel());
         setTitle("TT Snake");

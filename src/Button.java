@@ -1,9 +1,13 @@
+/* Button class
+
+ */
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class Button extends JButton implements MouseListener{
+
     Button(String text){
         setText(text);
         setFont(new Font("Georgia", Font.PLAIN, 25));

@@ -1,3 +1,7 @@
+/*
+Help class, which tells about rules for playing the TT snake.
+ */
+
 import javax.swing.*;
 import java.awt.*;
 

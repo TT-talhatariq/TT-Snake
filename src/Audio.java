@@ -1,14 +1,14 @@
-import javax.security.sasl.SaslClient;
+/*
+This class is managing all audio operations in Game, like eating, dying & clicking the button.
+ */
+
 import javax.sound.sampled.*;
-import java.io.File;
-import java.io.IOException;
-import java.util.Scanner;
+import java.io.*;
 
 public class Audio {
     Clip audio;
-    Audio(String path){
+    Audio(String path){         //Path of audio file
         File file =  new File(path);
-        Scanner scanner = new Scanner(System.in);
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
             audio = AudioSystem.getClip();
@@ -19,7 +19,6 @@ public class Audio {
         } catch (IOException | LineUnavailableException e) {
             e.printStackTrace();
         }
-
 
     }
 }

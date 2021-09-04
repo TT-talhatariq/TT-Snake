@@ -1,3 +1,7 @@
+/*
+This class consists UI, Control, L
+ */
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
